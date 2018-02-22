@@ -4,8 +4,9 @@ close all
 t=180; %simulation time in seconds
 dt=0.4; %simulation step time in seconds
 N=round(t/dt); %simulation steps
-RATE=1; %refresh draw rate
-u_sv=[ones(1,N); ones(1,N)./30];
+RATE=1e9; %refresh draw rate
+
+u_sv=[ones(1,N); ones(1,N)./30]; %predifined path for SV
 SV_X_t=zeros(3,N);
 SV_X_e_t=zeros(3,N);
 SV_X_t(:,1)=[0 0 0];
@@ -15,7 +16,7 @@ u_uuv=[ones(1,N); zeros(1,N); -1.*ones(1,N/2)./1000 , ones(1,N/2)./1000 ;ones(1,
 UUV_X_t=zeros(6,N);
 UUV_X_e_t=zeros(6,N);
 
-for i=2:N
+for i=2:N %Simulation of movement of both vehicles
     [X, X_e]=SV_Location(dt, SV_X_t(:,i-1), u_sv(1, i), u_sv(2, i));
     SV_X_t(:,i)=X;
     SV_X_e_t(:,i)=X_e;
@@ -24,6 +25,7 @@ for i=2:N
     UUV_X_e_t(:,i)=X_e;
 end
 
+%draw movement on figures
 L=0.1;
 figure('Name','Surface Vehicle Path')
 minX = min(min(SV_X_t(1,:)), min(SV_X_e_t(1,:)));
